@@ -1,5 +1,5 @@
 export default interface BaseObject {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }

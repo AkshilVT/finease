@@ -1,6 +1,5 @@
+import { createUser, getUser, updateFinancialDetails, updateProfile } from '@functions/index';
 import type { AWS } from '@serverless/typescript';
-
-// import hello from '@functions/hello';
 
 const serverlessConfiguration: AWS = {
   service: 'finease',
@@ -30,13 +29,13 @@ const serverlessConfiguration: AWS = {
             "dynamodb:UpdateItem",
             "dynamodb:DeleteItem",
           ],
-          Resource: "arn:aws:dynamodb:us-east-1:*:table/finease_auth",
+          Resource: "arn:aws:dynamodb:us-east-1:*:table/finease_user",
         }],
       },
     },
   },
   // import the function via paths
-  // functions: { hello },
+  functions: { getUser, createUser, updateProfile, updateFinancialDetails },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -63,7 +62,7 @@ const serverlessConfiguration: AWS = {
       AuthTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
-          TableName: "finease_auth",
+          TableName: "finease_user",
           AttributeDefinitions: [
             {
               AttributeName: "id",
