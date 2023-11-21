@@ -1,6 +1,7 @@
 import { handlerPath } from '@libs/handler-resolver';
+import profileFunctions from './profile';
 
-export const createUser = {
+const createUser = {
     handler: `${handlerPath(__dirname)}/handler.createUser`,
     events: [
         {
@@ -12,7 +13,7 @@ export const createUser = {
     ]
 };
 
-export const getUser = {
+const getUser = {
     handler: `${handlerPath(__dirname)}/handler.getUser`,
     events: [
         {
@@ -24,26 +25,9 @@ export const getUser = {
     ]
 };
 
-export const updateProfile = {
-    handler: `${handlerPath(__dirname)}/handler.updateProfile`,
-    events: [
-        {
-            http: {
-                method: 'post',
-                path: 'user/{id}/profile'
-            }
-        }
-    ]
-};
-
-export const updateFinancialDetails = {
-    handler: `${handlerPath(__dirname)}/handler.updateFinancialDetails`,
-    events: [
-        {
-            http: {
-                method: 'post',
-                path: 'user/{id}/financial-details'
-            }
-        }
-    ]
-};
+const functions = {
+    createUser,
+    getUser,
+    ...profileFunctions
+}
+export default functions

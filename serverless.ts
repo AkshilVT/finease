@@ -1,4 +1,4 @@
-import { createUser, getUser, updateFinancialDetails, updateProfile } from '@functions/index';
+import functions from '@functions/index';
 import type { AWS } from '@serverless/typescript';
 
 const serverlessConfiguration: AWS = {
@@ -35,7 +35,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { getUser, createUser, updateProfile, updateFinancialDetails },
+  functions,
   package: { individually: true },
   custom: {
     esbuild: {
