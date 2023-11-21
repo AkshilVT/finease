@@ -1,8 +1,7 @@
 import BaseObject from "./BaseObject";
 
 export default interface BudgetEntry extends BaseObject {
-    name: string;
+    category: string;
     description: string;
-    month: string;
     amount: number;
 }

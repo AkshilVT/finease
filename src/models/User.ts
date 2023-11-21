@@ -3,14 +3,14 @@ import BaseObject from "./BaseObject";
 import FinancialDetails from "./FinancialDetails";
 import Asset from "./Asset";
 import Loans from "./Loans";
-import Budget from "./BudgetEntry";
 import Investment from "./Investment";
+import Budget from "./Budget";
 
 export default interface User extends BaseObject {
     profile: Profile;
     financial_details: FinancialDetails;
     assets: Asset[];
-    budget: Budget[];
+    budget: Budget;
     loans: Loans[];
     investments: Investment[];
 }
