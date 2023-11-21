@@ -2,6 +2,8 @@ import { handlerPath } from '@libs/handler-resolver';
 import profileFunctions from './profile';
 import assetFunctions from './asset';
 import budgetFunctions from './budget';
+import loanFunctions from './loan';
+import investmentFunctions from './investment';
 
 const createUser = {
     handler: `${handlerPath(__dirname)}/handler.createUser`,
@@ -32,6 +34,8 @@ const functions = {
     getUser,
     ...profileFunctions,
     ...assetFunctions,
-    ...budgetFunctions
+    ...budgetFunctions,
+    ...loanFunctions,
+    ...investmentFunctions
 }
 export default functions
