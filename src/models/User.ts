@@ -7,6 +7,7 @@ import Investment from "./Investment";
 import Budget from "./Budget";
 
 export default interface User extends BaseObject {
+    username: string;
     profile: Profile;
     financial_details: FinancialDetails;
     assets: Asset[];

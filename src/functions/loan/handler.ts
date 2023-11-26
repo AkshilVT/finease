@@ -5,11 +5,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Loan from "src/models/Loans";
 import userService from "src/services";
 import Ajv from "ajv";
+import checkAuth from "@libs/check-auth";
 
 export const addLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         const { id } = event.pathParameters;
         if (!id) throw new Error("User id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -56,7 +60,7 @@ export const addLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<APIG
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
@@ -66,6 +70,10 @@ export const updateLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<A
         const { id, loanId } = event.pathParameters;
         if (!id) throw new Error("User id is required");
         if (!loanId) throw new Error("Loan id is required");
+
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -108,7 +116,7 @@ export const updateLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<A
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
@@ -118,6 +126,9 @@ export const deleteLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<A
         const { id, loanId } = event.pathParameters;
         if (!id) throw new Error("User id is required");
         if (!loanId) throw new Error("Loan id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -138,7 +149,7 @@ export const deleteLoan = middyfy(async (event: APIGatewayProxyEvent): Promise<A
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });

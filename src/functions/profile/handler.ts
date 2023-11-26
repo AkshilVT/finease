@@ -1,4 +1,5 @@
 import { formatJSONResponse } from "@libs/api-gateway";
+import checkAuth from "@libs/check-auth";
 import { middyfy } from "@libs/lambda";
 import Ajv from "ajv";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
@@ -13,6 +14,10 @@ export const updateProfile = middyfy(async (event: APIGatewayProxyEvent): Promis
             console.error("User id is required");
             throw new Error("User id is required")
         };
+
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) {
@@ -78,6 +83,9 @@ export const updateFinancialDetails = middyfy(async (event: APIGatewayProxyEvent
             console.error("User id is required");
             throw new Error("User id is required")
         };
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) {

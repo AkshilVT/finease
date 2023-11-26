@@ -5,11 +5,15 @@ import Ajv from "ajv";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Asset from "src/models/Asset";
 import userService from "src/services";
+import checkAuth from "@libs/check-auth";
 
 export const addAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         const { id } = event.pathParameters;
         if (!id) throw new Error("User id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -58,7 +62,7 @@ export const addAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<API
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
@@ -68,6 +72,9 @@ export const updateAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<
         const { id, assetId } = event.pathParameters;
         if (!id) throw new Error("User id is required");
         if (!assetId) throw new Error("Asset id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -115,7 +122,7 @@ export const updateAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
@@ -125,6 +132,9 @@ export const deleteAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<
         const { id, assetId } = event.pathParameters;
         if (!id) throw new Error("User id is required");
         if (!assetId) throw new Error("Asset id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const oldUser = await userService.getUser(id);
         if (!oldUser) throw new Error("User not found");
@@ -147,7 +157,7 @@ export const deleteAsset = middyfy(async (event: APIGatewayProxyEvent): Promise<
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });

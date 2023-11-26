@@ -1,18 +1,30 @@
-import Ajv from "ajv";
 import { middyfy } from "@libs/lambda";
-import { v4 } from "uuid";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import userService from "../services";
 import { formatJSONResponse } from "@libs/api-gateway";
+import "core-js/stable/atob";
+import { jwtDecode } from "jwt-decode";
+import checkAuth from "@libs/check-auth";
+
 
 export const createUser = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
-        const userId = v4();
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        const decoded = jwtDecode(event.multiValueHeaders.auth_token[0]);
+        if (!decoded.sub) throw new Error("User id is required");
+
+        const userId = decoded.sub;
+
+        // check if user already exists
+        const userExists = await userService.getUser(userId);
+        if (userExists) throw new Error("User already exists");
+
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;
         const user = await userService.createUser(
             {
                 id: userId,
+                username: null,
                 profile: {
                     name: null,
                     email: null,
@@ -50,13 +62,16 @@ export const createUser = middyfy(async (event: APIGatewayProxyEvent): Promise<A
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
 
 export const getUser = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: event.pathParameters.id });
+
         const { id } = event.pathParameters;
         if (!id) throw new Error("User id is required");
 
@@ -68,70 +83,7 @@ export const getUser = middyfy(async (event: APIGatewayProxyEvent): Promise<APIG
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 });
-
-// export const
-// export const updateFinancialDetails = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-//     try {
-//         const { id } = event.pathParameters;
-//         if (!id) throw new Error("User id is required");
-
-//         const financial_details: FinancialDetails = JSON.parse(event.body);
-//         if (!financial_details) throw new Error("Financial Details is required");
-
-//         const ajv = new Ajv();
-//         const validate = ajv.compile({
-//             type: "object",
-//             properties: {
-//                 incomes: {
-//                     type: "object",
-//                     properties: {
-//                         salary: { type: "number" },
-//                         house_property: { type: "number" },
-//                         business_and_profession: { type: "number" },
-//                         capital_gains: { type: "number" },
-//                         other_sources: { type: "number" }
-//                     },
-//                     required: ["salary", "house_property", "business_and_profession", "capital_gains", "other_sources"]
-//                 },
-//                 insurance: {
-//                     type: "object",
-//                     properties: {
-//                         life_insurance: { type: "number" },
-//                         health_insurance: { type: "number" },
-//                         vehicle_insurance: { type: "number" },
-//                         other_insurance: { type: "number" }
-//                     },
-//                     required: ["life_insurance", "health_insurance", "vehicle_insurance", "other_insurance"]
-//                 }
-//             },
-//             required: ["incomes", "insurance"]
-//         });
-
-//         const valid = validate(financial_details);
-//         if (!valid) throw new Error(validate.errors[0].message);
-
-//         const oldUser = await userService.getUser(id);
-
-//         const user = await userService.updateUser({
-//             ...oldUser,
-//             financial_details: {
-//                 ...oldUser.financial_details,
-//                 ...financial_details,
-//                 updatedAt: new Date().toISOString()
-//             }
-//         });
-//         return formatJSONResponse({
-//             user
-//         })
-//     }
-//     catch (error) {
-//         return formatJSONResponse({
-//             status: 500,
-//             message: error
-//         })
-//     }
-// });

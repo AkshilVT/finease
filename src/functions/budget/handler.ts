@@ -5,11 +5,15 @@ import Ajv from "ajv";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import BudgetEntry from "src/models/BudgetEntry";
 import userService from "src/services";
+import checkAuth from "@libs/check-auth";
 
 export const addBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         const { id } = event.pathParameters;
         if (!id) throw new Error("User id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const { year, month } = event.queryStringParameters;
         // check if the month and year are numbers
@@ -75,7 +79,7 @@ export const addBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Promi
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 }
@@ -88,6 +92,10 @@ export const updateBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Pr
 
         if (!id) throw new Error("User id is required");
         if (!budgetId) throw new Error("Entry id is required");
+
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const { year, month } = event.queryStringParameters;
         // check if the month and year are numbers
@@ -158,7 +166,7 @@ export const updateBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Pr
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 })
@@ -168,6 +176,9 @@ export const deleteBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Pr
         const { id, budgetId } = event.pathParameters;
         if (!id) throw new Error("User id is required");
         if (!budgetId) throw new Error("Entry id is required");
+
+        if (!event.multiValueHeaders.auth_token) throw new Error("Auth token is required");
+        checkAuth({ auth_token: event.multiValueHeaders.auth_token[0], id: id });
 
         const { year, month } = event.queryStringParameters;
         // check if the month and year are numbers
@@ -214,7 +225,7 @@ export const deleteBudgetEntry = middyfy(async (event: APIGatewayProxyEvent): Pr
     catch (error) {
         return formatJSONResponse({
             status: 500,
-            message: error
+            message: error.message
         })
     }
 })
