@@ -10,6 +10,11 @@ const createUser = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user'
             }
@@ -22,6 +27,11 @@ const getUser = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'get',
                 path: 'user/{id}'
             }

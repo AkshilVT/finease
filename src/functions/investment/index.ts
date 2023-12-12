@@ -5,6 +5,11 @@ const addInvestment = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/investment'
             }
@@ -17,6 +22,11 @@ const updateInvestment = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/investment/{investmentId}'
             }
@@ -29,6 +39,11 @@ const deleteInvestment = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'delete',
                 path: 'user/{id}/investment/{investmentId}'
             }

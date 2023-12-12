@@ -5,6 +5,11 @@ const addAsset = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/asset'
             }
@@ -17,6 +22,11 @@ const updateAsset = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/asset/{assetId}'
             }
@@ -29,6 +39,11 @@ const deleteAsset = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'delete',
                 path: 'user/{id}/asset/{assetId}'
             }

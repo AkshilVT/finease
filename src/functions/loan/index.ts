@@ -6,6 +6,11 @@ const addLoan = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/loan'
             }
@@ -18,6 +23,11 @@ const updateLoan = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/loan/{loanId}'
             }
@@ -30,6 +40,11 @@ const deleteLoan = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'delete',
                 path: 'user/{id}/loan/{loanId}'
             }

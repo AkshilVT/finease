@@ -5,6 +5,11 @@ const addBudgetEntry = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/budget'
             }
@@ -17,6 +22,11 @@ const updateBudgetEntry = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'post',
                 path: 'user/{id}/budget/{budgetId}'
             }
@@ -29,6 +39,11 @@ const deleteBudgetEntry = {
     events: [
         {
             http: {
+                cors: {
+                    origin: '*',
+                    headers: ['Content-Type', 'Authorization'],
+                    allowCredentials: true,
+                },
                 method: 'delete',
                 path: 'user/{id}/budget/{budgetId}'
             }
