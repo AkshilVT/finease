@@ -70,3 +70,7 @@ Explanation of the folder structure -
 - `libs` are the library functions that are reused across the application.
 - `models` are the database models; this is how the data would be stored in the database (DynamoDB).
 - Finally, `services` has functions that would connect with the AWS and do operations, like CRUD operations on DynamoDB.
+
+
+----
+Boiler plate - https://github.com/andrenbrandao/serverless-typescript-boilerplate
